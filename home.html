@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tryout LS</title>
+    <!-- Firebase SDKs -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyBx8r9uh-35GqQPN3wlH4Ss7LqEYiaMAdo",
+    authDomain: "lstryout-ed83e.firebaseapp.com",
+    databaseURL: "https://lstryout-ed83e-default-rtdb.firebaseio.com",
+    projectId: "lstryout-ed83e",
+    storageBucket: "lstryout-ed83e.firebasestorage.app",
+    messagingSenderId: "123806049153",
+    appId: "1:123806049153:web:8fa5534975f608a520fe80"
+  };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Form submission logic
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.getElementById("orderForm");
+
+            form.addEventListener("submit", async (e) => {
+                e.preventDefault(); // Prevent the default form submission
+
+                // Get form data
+                const fbLink = document.getElementById("Fblink").value;
+                const name = document.getElementById("name").value;
+                const rank = document.getElementById("Rank").value;
+                const discord = document.getElementById("Discord").value;
+                const role = document.getElementById("Role").value;
+
+                try {
+                    // Add data to Firestore
+                    const docRef = await addDoc(collection(db, "tryouts"), {
+                        fbLink,
+                        name,
+                        rank,
+                        discord,
+                        role,
+                        timestamp: new Date()
+                    });
+                    alert(`Tryout submitted! Document ID: ${docRef.id}`);
+                } catch (error) {
+                    console.error("Error adding document: ", error);
+                    alert("Error submitting tryout.");
+                }
+
+                // Reset the form
+                form.reset();
+            });
+        });
+    </script>
+    <style>
+        body {
+            background-image: url(2.jpg);
+            height: 100vh;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+
+        .order-form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        .form-group button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="order-form-container">
+        <h1>Livestrong Tryout</h1>
+        <div class="form-group">
+            <label for="Fblink">Fb link:</label>
+            <input type="text" id="Fblink" name="Fblink" required>
+        </div>
+        <form id="orderForm">
+            <div class="form-group">
+                <label for="name">IGN:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="Rank">Rank:</label>
+                <input type="text" id="Rank" name="Rank" required>
+            </div>
+            <div class="form-group">
+                <label for="Discord">Discord Id:</label>
+                <input type="text" id="Discord" name="Discord" required>
+            </div>
+            <div class="form-group">
+                <label for="Role">Role:</label>
+                <select id="Role" name="Role" required>
+                    <option value="">Select a Role</option>
+                    <option value="Sniper">Sniper</option>
+                    <option value="Rifler">Rifler</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button type="submit">Submit Tryout</button>
+            </div>
+        </form>
+        <div id="orderSummary" class="order-summary"></div>
+    </div>
+</body>
+</html>
